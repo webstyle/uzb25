@@ -45,7 +45,6 @@ app.post('/upload', function(req, res) {
             .command('composite')
             .in("-gravity", "center")
             .in("./uploads/uzb.png")
-            .blur(30, 30)
             .in("-gravity", "center")
             .in("./uploads/filename.jpg")
             .write("./uploads/result.jpg", function(e) {
