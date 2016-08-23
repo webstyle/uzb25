@@ -52,6 +52,8 @@ app.post('/upload', function(req, res) {
         //         if (err) return res.send('Error');
         //         res.redirect('/result.jpg');
         //     });
+        fs.unlinkSync('./uploads/result.jpg');
+
         sharp('./uploads/uzb.png')
             .resize(140)
             // .flatten()
