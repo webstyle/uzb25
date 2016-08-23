@@ -3,6 +3,7 @@ var fileUpload = require('express-fileupload');
 var fs = require('fs');
 var gm = require('gm');
 var async = require('async');
+var sharp = require('sharp');
 
 var passport = require('passport');
 var FacebookStrategy = require('passport-facebook');
@@ -41,16 +42,38 @@ app.post('/upload', function(req, res) {
             return res.status(500).send(err);
         }
 
-        gm()
-            .command('composite')
-            .in("-gravity", "center")
-            .in("./uploads/uzb.png")
-            .in("-gravity", "center")
-            .in("./uploads/filename.jpg")
-            .write("./uploads/result.jpg", function(e) {
-                if (err) return res.send('Error');
-                res.redirect('/result.jpg');
+        // gm()
+        //     .command('composite')
+        //     .in("-gravity", "center")
+        //     .in("./uploads/uzb.png")
+        //     .in("-gravity", "center")
+        //     .in("./uploads/filename.jpg")
+        //     .write("./uploads/result.jpg", function(err) {
+        //         if (err) return res.send('Error');
+        //         res.redirect('/result.jpg');
+        //     });
+        sharp('./uploads/uzb.png')
+            .resize(140)
+            // .flatten()
+            // .sharpen()
+            // .withMetadata()
+            // .quality(90)
+            .toBuffer()
+            .then(function(logo) {
+                sharp('./uploads/filename.jpg')
+                    .background('#fff')
+                    .overlayWith(logo, {
+                        gravity: sharp.gravity.south
+                    })
+                    .quality(90)
+                    .toFile('./uploads/result.jpg', function(err, info) {
+                        console.log(err);
+                        if (err) return res.send(err);
+                        res.redirect('./result.jpg')
+                    })
             });
+
+
     });
 });
 
