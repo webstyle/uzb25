@@ -10,10 +10,12 @@ var FacebookStrategy = require('passport-facebook');
 
 var app = express();
 
+var facebook_client_id = "id";
+var facebook_client_secret = "";
 
 passport.use(new FacebookStrategy({
-        clientID: 1179014042141213,
-        clientSecret: "915a8f331012718516e73c2480f40aba",
+        clientID: facebook_client_id,
+        clientSecret: facebook_client_secret,
         callbackURL: "http://localhost:3000/auth/facebook/callback"
     },
     function(accessToken, refreshToken, profile, cb) {
@@ -22,7 +24,7 @@ passport.use(new FacebookStrategy({
 ));
 
 app.use(express.static('public'));
-app.use(express.static('uploads'));
+app.use(express.static('result'));
 
 // default options
 app.use(fileUpload());
@@ -41,25 +43,24 @@ app.post('/upload', function(req, res) {
         if (err) {
             return res.status(500).send(err);
         }
+		
 
+		// graphicsmagick
         // gm()
         //     .command('composite')
         //     .in("-gravity", "center")
         //     .in("./uploads/uzb.png")
         //     .in("-gravity", "center")
         //     .in("./uploads/filename.jpg")
-        //     .write("./uploads/result.jpg", function(err) {
+        //     .write("./result/result.jpg", function(err) {
         //         if (err) return res.send('Error');
         //         res.redirect('/result.jpg');
         //     });
-        fs.unlinkSync('./uploads/result.jpg');
-
+        
+	
+		// libvips
         sharp('./uploads/uzb.png')
             .resize(140)
-            // .flatten()
-            // .sharpen()
-            // .withMetadata()
-            // .quality(90)
             .toBuffer()
             .then(function(logo) {
                 sharp('./uploads/filename.jpg')
@@ -68,10 +69,10 @@ app.post('/upload', function(req, res) {
                         gravity: sharp.gravity.south
                     })
                     .quality(90)
-                    .toFile('./uploads/result.jpg', function(err, info) {
+                    .toFile('./result/result.jpg', function(err, info) {
                         console.log(err);
                         if (err) return res.send(err);
-                        res.redirect('./result.jpg')
+                        res.redirect('/result.jpg')
                     })
             });
 
