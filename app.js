@@ -11,11 +11,13 @@ var sharp = require('sharp');
 var flash = require('connect-flash');
 var session = require('express-session');
 var mongoose = require('mongoose');
-
-
 var passport = require('passport');
 var FacebookStrategy = require('passport-facebook');
 require('./config/passport')(passport); // pass passport for configuration
+
+
+var Images = require('./models/images');
+var User = require('./models/user');
 
 var port = process.env.PORT || 3000;
 var app = express();
@@ -52,6 +54,7 @@ app.get('/', function (req, res) {
 
 app.post('/upload', function(req, res) {
     var sampleFile;
+    var user = req.user;
 
     if (!req.files) {
         return res.send('No files were uploaded.');;
@@ -67,7 +70,7 @@ app.post('/upload', function(req, res) {
             return res.status(500).send(err);
         }
 
-        overlay({path: newUploadedImagePath, fileName: newFileName, uuid: newUuid}, function (err, image) {
+        overlay({path: newUploadedImagePath, fileName: newFileName, uuid: newUuid, userId: 123}, function (err, image) {
             if(err) return res.send('Error');
 
             console.log(image);
@@ -77,7 +80,19 @@ app.post('/upload', function(req, res) {
 });
 
 app.get('/users', function(req, res) {
-    res.send(users);
+    User.find(function (err, users) {
+        if(err) return res.json(err);
+
+        res.json(users);
+    })
+});
+
+app.get('/images', function(req, res) {
+    Images.find(function (err, images) {
+        if(err) return res.json(err);
+
+        res.json(images);
+    })
 });
 
 // route for showing the profile page
@@ -127,6 +142,8 @@ var result, newUuid, newFileName;
 
 function overlay(image, callback) {
 
+    var resultFile = './result/' + image.fileName;
+
     console.log(image);
     console.log('logo');
 
@@ -138,15 +155,33 @@ function overlay(image, callback) {
             gravity: sharp.gravity.south
         })
         .quality(90)
-        .toFile('./result/' + image.fileName, function (err, info) {
-            console.log('err',err);
+        .toFile(resultFile, function (err, info) {
             if (err) return callback(err);
 
-            callback(null, {
+            var imageResults = [];
+            imageResults.push(resultFile);
+
+            var toSave = {
+                uuid: image.uuid,
+                image: {
+                    fileName: image.fileName,
+                    path: image.path
+                },
+                results: imageResults,
+                userId: image.userId,
+                created_at: new Date()
+            };
+            var newImages = new Images(toSave);
+            newImages.save(function (err, result) {
+               if(err) console.log(err);
+            });
+
+            var toReturn = {
                 fileName: newFileName,
                 savedPathPath: result,
                 uuid: newUuid,
                 info: info
-            });
+            };
+            callback(null, toReturn);
         })
 };
