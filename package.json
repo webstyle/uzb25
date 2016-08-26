@@ -5,9 +5,17 @@
   "main": "app.js",
   "dependencies": {
     "async": "^2.0.1",
+    "bcrypt-nodejs": "0.0.3",
+    "body-parser": "^1.15.2",
+    "cookie-parser": "^1.4.3",
+    "ejs": "^2.5.1",
     "express": "^4.14.0",
     "express-fileupload": "0.0.5",
+    "express-session": "^1.14.1",
     "gm": "^1.23.0",
+    "mongoose": "^4.5.10",
+    "morgan": "^1.7.0",
+    "node-uuid": "^1.4.7",
     "passport": "^0.3.2",
     "passport-facebook": "^2.1.1",
     "sharp": "^0.16.0"

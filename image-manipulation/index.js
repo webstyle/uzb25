@@ -1,34 +1,41 @@
 var sharp = require('sharp');
-var uuid = require('node-uuid');
+var path = require('path');
+
 
 module.exports.overlay = overlay;
 
-let posterUrl = ['../poster/1.png', '../poster/uzb.jpg'];
-let result;
+var posterUrl = ['./1.png', './uzb.png'];
+var result, newUuid, newFileName;
 
 /**
  * Overlay image-manipulation with poster
  * @param image
  */
-function overlay(image) {
-    sharp(posterUrl[0])
-        .resize(140)
-        .toBuffer()
-        .then(function (logo) {
+function overlay(image, callback) {
+        
+    var uploadsPath = path.join(__dirname, '../uploads') + '/' + image.fileName;
+    var resultsPath = path.join(__dirname, '../result') + '/' + image.fileName;
+    
+    console.log(image);
+    console.log('logo');
 
-            result = uuid.v4() + '.jpg';
+    newFileName = image.uuid + '.jpg';
 
-            sharp(image)
-                .background('#fff')
-                .overlayWith(logo, {
-                    gravity: sharp.gravity.south
-                })
-                .quality(90)
-                .toFile(result, function (err, info) {
-                    if (err) return res.send(err);
+    sharp()
+        .background('#fff')
+        .overlayWith(posterUrl[0], {
+            gravity: sharp.gravity.south
+        })
+        .quality(90)
+        .toFile(resultsPath, function (err, info) {
+            console.log('err',err);
+            if (err) return callback(err);
 
-                    console.log(info);
-                    res.redirect('/' + result);
-                })
-        });
+            callback(null, {
+                fileName: newFileName,
+                savedPathPath: result,
+                uuid: newUuid,
+                info: info
+            });
+        })
 };

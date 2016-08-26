@@ -1,0 +1,50 @@
+<!-- views/profile.ejs -->
+<!doctype html>
+<html>
+<head>
+    <title>Node Authentication</title>
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
+    <style>
+        body {
+            padding-top: 80px;
+            word-wrap: break-word;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <div class="page-header text-center">
+        <h1>Uzbekify</h1>
+        <p>
+            O'zbekiston Mustaqilligining 25 yilliga bag'ishlanadi.
+        </p>
+
+        <a class="btn btn-default" href="/auth/facebook">Facebook</a>
+    </div>
+
+    <div class="row">
+
+        <!-- FACEBOOK INFORMATION -->
+        <div class="col-offset-6">
+
+            <form ref='uploadForm' id='uploadForm' action='/upload' method='post' encType="multipart/form-data">
+                <div class="input-group">
+                    <input type="file" class="form-control" name="sampleFile" placeholder="Select your photo">
+                    <span class="input-group-btn">
+                         <button class="btn btn-default" type="submit">Upload</button>
+                    </span>
+                </div><!-- /input-group --
+
+            </form>
+
+
+
+        </div>
+
+    </div>
+
+</div>
+</body>
+</html>
