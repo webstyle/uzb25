@@ -1,0 +1,65 @@
+<!-- views/profile.ejs -->
+<!doctype html>
+<html>
+
+<head>
+    <title>Uzbekify</title>
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/app.css" media="screen" charset="utf-8">
+</head>
+
+<body>
+    <script>
+        window.fbAsyncInit = function() {
+            FB.init({
+                appId: '1179014042141213',
+                xfbml: true,
+                version: 'v2.7'
+            });
+        };
+
+        (function(d, s, id) {
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) {
+                return;
+            }
+            js = d.createElement(s);
+            js.id = id;
+            js.src = "//connect.facebook.net/en_US/sdk.js";
+            fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));
+    </script>
+
+    <div class="container">
+        <div class="page-header text-center">
+            <h1 class="text-success"><i class="fa fa-check"></i> Rasm tayyor</h1>
+            <a href="/profile" class="btn btn-default"><i class="fa fa-angle-left"></i></a>
+            <a href="/<%= image.fileName%>" class="btn btn-success"><i class="fa fa-cloud-download"></i> yuklab olish</a>
+            <div id="shareBtn" class="btn btn-info clearfix"><i class="fa fa-share-alt"></i></div>
+        </div>
+
+        <div class="row">
+            <a href="#">
+                    <img src="/<%= image.fileName%>" class="img-responsive img-center" height="500" width="500" alt="...">
+                </a>
+        </div>
+
+
+    </div>
+
+    <script>
+        document.getElementById('shareBtn').onclick = function() {
+            FB.ui({
+                method: 'share',
+                display: 'popup',
+                picture: 'http://uzb25.yer.one/<%= image.fileName%>',
+            }, function(response) {
+                console.log(response);
+
+            });
+        }
+    </script>
+</body>
+
+</html>

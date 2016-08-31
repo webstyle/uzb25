@@ -2,40 +2,66 @@
 <!doctype html>
 <html>
 <head>
-    <title>Node Authentication</title>
+    <title>Uzbekify</title>
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
-    <style>
-        body        { padding-top:80px; word-wrap:break-word; }
-    </style>
+    <link rel="stylesheet" href="/app.css" media="screen" charset="utf-8">
 </head>
 <body>
 <div class="container">
 
-    <div class="page-header text-center">
-        <h1><span class="fa fa-anchor"></span> Profile Page</h1>
-        <a href="/logout" class="btn btn-default btn-sm">Logout</a>
-    </div>
-
     <div class="row">
 
-        <!-- FACEBOOK INFORMATION -->
-        <div class="col-sm-6">
-            <div class="well">
-                <h3 class="text-primary"><span class="fa fa-facebook"></span> Facebook</h3>
-
-                <p>
-                    <strong>id</strong>: <%= user.facebook.id %><br>
-                    <strong>token</strong>: <%= user.facebook.token %><br>
-                    <strong>email</strong>: <%= user.facebook.email %><br>
-                    <strong>name</strong>: <%= user.facebook.name %>
+    <div class="col-xs-12 col-md-4">
+        <div class="media">
+            <a class="pull-left" href="#">
+                <img class="media-object dp img-circle" src="<%= image.location %>" style="width: 50px;height:50px;">
+            </a>
+            <div class="media-body">
+                <h4 class="media-heading"><%= user.facebook.name %></h4>
+                <p class="text-muted">
+                  Rasmingizni tanlang
                 </p>
+                <form ref='uploadForm' id='uploadForm' action='/upload' method='post' encType="multipart/form-data">
+                    <div class="input-group">
+                        <input type="file" class="form-control" name="sampleFile">
+                        <span class="input-group-btn">
+                             <button class="btn btn-info" type="submit">Yuklash</button>
+                        </span>
+                    </div><!-- /input-group -->
 
+                </form>
             </div>
         </div>
 
+        <!-- FACEBOOK INFORMATION -->
+            <div class="row">
+              <div class="page-header">
+                <h4 class="text-primary"><span class="fa fa-facebook"></span> Facebook</h4>
+              </div>
+
+                <p>
+                    <strong>id</strong>: <%= user.facebook.id %><br>
+                    <strong>email</strong>: <%= user.facebook.email %><br>
+                    <strong>name</strong>: <%= user.facebook.name %>
+                </p>
+                <a href="/logout">Chiqish</a>
+            </div>
     </div>
 
+    <div class="col-xs-12 col-sm-6 col-md-8">
+      <% if (haveImages) { %>
+        <% images.forEach(function(photo){ %>
+          <div class="row">
+            <div class="col-xs-12 col-md-8">
+              <a href="/<%= photo.image.fileName%>" class="thumbnail">
+                <img src="/<%= photo.image.fileName%>" alt="...">
+              </a>
+            </div>
+          </div>
+        <% }); %>
+      <% } %>
+    </div>
 </div>
 </body>
 </html>
